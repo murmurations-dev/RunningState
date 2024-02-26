@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "FF8577DA-D27A-46C6-A314-9CFFBFF875BB",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Explorer.xcodeproj",
+        "identifier" : "8FC60BA72B8B85E3000B0A8C",
+        "name" : "ExplorerTests"
+      }
+    }
+  ],
+  "version" : 1
+}
