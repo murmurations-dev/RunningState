@@ -10,7 +10,7 @@ import SwiftUI
 import AsyncExtensions
 
 
-struct Running {
+public struct Running {
     let updates: AsyncCurrentValueSubject<State>
     
     init(initialState: State) {
@@ -18,12 +18,12 @@ struct Running {
     }
 }
 
-extension Running {
-    enum State: String {
+public extension Running {
+    enum State: String, Codable {
         case stopped
         case started
 
-        static var typeDisplayRepresentation: TypeDisplayRepresentation {
+        public static var typeDisplayRepresentation: TypeDisplayRepresentation {
             "Exploration"
         }
     }
@@ -38,7 +38,7 @@ extension Running.State {
 
 
 extension Running.State : AppEnum {
-    static let caseDisplayRepresentations: [Self: DisplayRepresentation] = [
+    public static let caseDisplayRepresentations: [Self: DisplayRepresentation] = [
         .stopped: .init(title: "Stopped", image: .init(systemName: "location.slash")),
         .started: .init(title: "Started", image: .init(systemName: "location"))
     ]
@@ -57,7 +57,7 @@ extension Running.State.SetStarted : AppIntent {
     
     @MainActor
     func perform() async throws -> some IntentResult {
-        let appModel = ExplorerApp.Model.shared
+        let appModel = AppModel.shared
         appModel.setRunningStateValue(.started)
         return .result()
     }
@@ -75,7 +75,7 @@ extension Running.State.SetStopped : AppIntent {
     
     @MainActor
     func perform() async throws -> some IntentResult {
-        let appModel = ExplorerApp.Model.shared
+        let appModel = AppModel.shared
         appModel.setRunningStateValue(.stopped)
         return .result()
     }
@@ -93,7 +93,7 @@ extension Running.State.GetValue : AppIntent {
     
     @MainActor
     func perform() async throws -> some IntentResult & ReturnsValue<Running.State> {
-        let appModel = ExplorerApp.Model.shared
+        let appModel = AppModel.shared
         let state = appModel.getRunningStateValue()
         return .result(value: state)
     }

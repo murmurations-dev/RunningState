@@ -42,7 +42,7 @@ extension ExplorationView {
     @Observable class Model {
         var runningState: Running.State
         
-        init(appModel: ExplorerApp.Model = ExplorerApp.Model.shared) {
+        init(appModel: AppModel = AppModel.shared) {
             self.runningState = appModel.getRunningStateValue()
             appModel.assignRunningStateUpdates(to: self, on: \.runningState)
         }

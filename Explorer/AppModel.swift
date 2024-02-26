@@ -1,25 +1,27 @@
 //
-//  ExplorerApp.Model.swift
+//  AppModel.swift
 //  Explorer
 //
 //  Created by Etienne Vautherin on 26/02/2024.
 //
 
-extension ExplorerApp {
-    class Model {
-        static let shared = Model()
-        private let running: Running
-        
-        init(
-            runningStateValue: Running.State = .stopped
-        ) {
-            self.running = Running(initialState: runningStateValue)
-        }
+import ActivityKit
+
+class AppModel {
+    static let shared = AppModel()
+    var explorerActivity: Activity<ExplorationAttributes>?
+
+    private let running: Running
+    
+    init(
+        runningStateValue: Running.State = .stopped
+    ) {
+        self.running = Running(initialState: runningStateValue)
     }
 }
 
 // MARK: Running State handling
-extension ExplorerApp.Model {
+extension AppModel {
     func getRunningStateValue() -> Running.State {
         running.updates.value
     }
