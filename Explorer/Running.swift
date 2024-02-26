@@ -81,22 +81,23 @@ extension Running.State.SetStopped : AppIntent {
     }
 }
 
-//extension Running.State.GetValue : AppIntent {
-//    static let title: LocalizedStringResource = "Exploration state"
-//    static let description: IntentDescription? = """
-//            Get exploration state.
-//    """
-//    
-//    var displayRepresentation: DisplayRepresentation {
-//        Running.State.caseDisplayRepresentations[.stopped] ?? ""
-//    }
-//    
-//    @MainActor
-//    func perform() async throws -> some IntentResult {
-//        AppModel.shared.getRunningStateValue()
-//        return .result()
-//    }
-//}
+extension Running.State.GetValue : AppIntent {
+    static let title: LocalizedStringResource = "Exploration state"
+    static let description: IntentDescription? = """
+            Get exploration state.
+    """
+    
+    var displayRepresentation: DisplayRepresentation {
+        Running.State.caseDisplayRepresentations[.stopped] ?? ""
+    }
+    
+    @MainActor
+    func perform() async throws -> some IntentResult & ReturnsValue<Running.State> {
+        let appModel = ExplorerApp.Model.shared
+        let state = appModel.getRunningStateValue()
+        return .result(value: state)
+    }
+}
 
 
 
