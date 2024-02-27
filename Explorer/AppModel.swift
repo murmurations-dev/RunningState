@@ -11,33 +11,52 @@ class AppModel {
     static let shared = AppModel()
     var explorerActivity: Activity<ExplorationAttributes>?
 
-    private let running: Running
+    let running: Running
     
     init(
         runningStateValue: Running.State = .stopped
     ) {
         self.running = Running(initialState: runningStateValue)
-    }
-}
-
-// MARK: Running State handling
-extension AppModel {
-    func getRunningStateValue() -> Running.State {
-        running.updates.value
-    }
-    
-    func setRunningStateValue(_ value: Running.State) {
-        running.updates.value = value
-    }
-    
-    func assignRunningStateUpdates<Root>(
-        to receiver: Root,
-        on keyPath: ReferenceWritableKeyPath<Root, Running.State>
-    ) {
-        Task { @MainActor in
+        explorationActivity(state: runningStateValue)
+        
+        Task {
             for await state in running.updates {
-                receiver[keyPath: keyPath] = state
+                explorationActivity(state: state)
             }
+        }
+    }
+    
+    func explorationActivity(state: Running.State) {
+        switch state {
+        case .stopped:
+            guard let explorerActivity else { break }
+            Task {
+                let updatedState = ExplorationAttributes.ContentState(emoji: "🙄", runningState: .stopped)
+                await explorerActivity.end(.init(state: updatedState, staleDate: .none), dismissalPolicy: .default)
+            }
+            self.explorerActivity = .none
+            
+        case .started:
+            // guard foreground
+            guard ActivityAuthorizationInfo().areActivitiesEnabled else {
+                print("Activities are not enabled!")
+                return
+            }
+            
+            let exploration = ExplorationAttributes(name: "Smile")
+            let initialState = ExplorationAttributes.ContentState(emoji: "😀", runningState: .started)
+            
+            do {
+                self.explorerActivity = try Activity<ExplorationAttributes>.request(
+                    attributes: exploration,
+                    content: .init(state: initialState, staleDate: .none),
+                    pushType: .none
+                )
+                
+            } catch (let error) {
+                print("Error: \(error.localizedDescription)")
+            }
+
         }
     }
 }

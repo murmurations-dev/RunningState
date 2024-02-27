@@ -10,13 +10,47 @@ import SwiftUI
 import AsyncExtensions
 
 
+protocol StateContainer {
+    associatedtype State
+    
+    func setStateValue(_ newValue: State)
+    func getStateValue() -> State
+    func assignStateUpdates<Root>(
+        to receiver: Root,
+        on keyPath: ReferenceWritableKeyPath<Root, Running.State>
+    ) -> Task<(), Never>
+}
+
+protocol AsyncCurrentValueSubjectStateContainer : StateContainer {
+    var updates: AsyncCurrentValueSubject<State> { get }
+}
+
+extension AsyncCurrentValueSubjectStateContainer {
+    func setStateValue(_ newValue: State) { updates.value = newValue }
+    func getStateValue() -> State { updates.value }
+    func assignStateUpdates<Root>(
+        to receiver: Root,
+        on keyPath: ReferenceWritableKeyPath<Root, State>
+    ) -> Task<(), Never> {
+        Task { @MainActor in
+            for await state in updates {
+                receiver[keyPath: keyPath] = state
+            }
+        }
+    }
+}
+
+
 public struct Running {
+    static let shared = Running(initialState: .stopped)
     let updates: AsyncCurrentValueSubject<State>
     
     init(initialState: State) {
         self.updates = AsyncCurrentValueSubject<State>(initialState)
     }
 }
+
+extension Running : AsyncCurrentValueSubjectStateContainer {}
 
 public extension Running {
     enum State: String, Codable {
@@ -57,8 +91,8 @@ extension Running.State.SetStarted : AppIntent {
     
     @MainActor
     func perform() async throws -> some IntentResult {
-        let appModel = AppModel.shared
-        appModel.setRunningStateValue(.started)
+        let running = Running.shared
+        running.setStateValue(.started)
         return .result()
     }
 }
@@ -75,8 +109,8 @@ extension Running.State.SetStopped : AppIntent {
     
     @MainActor
     func perform() async throws -> some IntentResult {
-        let appModel = AppModel.shared
-        appModel.setRunningStateValue(.stopped)
+        let running = Running.shared
+        running.setStateValue(.stopped)
         return .result()
     }
 }
@@ -93,8 +127,8 @@ extension Running.State.GetValue : AppIntent {
     
     @MainActor
     func perform() async throws -> some IntentResult & ReturnsValue<Running.State> {
-        let appModel = AppModel.shared
-        let state = appModel.getRunningStateValue()
+        let running = Running.shared
+        let state = running.getStateValue()
         return .result(value: state)
     }
 }
