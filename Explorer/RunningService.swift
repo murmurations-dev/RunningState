@@ -7,14 +7,15 @@
 
 import AsyncExtensions
 
-struct RunningService : AppState {
+struct RunningService : AsyncCurrentValueSubjectState {
+    typealias Sequence = AsyncCurrentValueSubject<State>
     typealias StateElement = State
     
-    static let shared: RunningService = RunningService(initialStateValue: .stopped)
-    let updates: AsyncCurrentValueSubject<State>
+    static let shared = RunningService(.stopped)
+    let stateUpdates: Sequence
     
-    init(initialStateValue: State) {
-        self.updates = AsyncCurrentValueSubject<State>(initialStateValue)
+    init(_ initialStateValue: State) {
+        self.stateUpdates = Sequence.init(initialStateValue)
     }
 }
 

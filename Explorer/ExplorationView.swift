@@ -42,12 +42,15 @@ extension ExplorationView {
     @Observable class Model {
         var state: RunningService.State
         
-        let running = RunningService.shared
-        var updatesTask: Task<(), Never>?
+        let runningService: RunningService
+        var updatesTask: Task<(), Error>?
 
-        init() {
-            self.state = running.getStateValue()
-            self.updatesTask = running.assignStateUpdates(to: self, on: \.state)
+        init(
+            runningService: RunningService = RunningService.shared
+        ) {
+            self.runningService = runningService
+            self.state = runningService.getStateValue()
+            self.updatesTask = runningService.assignStateUpdates(to: self, on: \.state)
         }
         
         deinit {

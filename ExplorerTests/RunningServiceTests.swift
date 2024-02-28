@@ -1,24 +1,24 @@
 //
-//  RunningTests.swift
+//  AppStateTests.swift
 //  ExplorerTests
 //
 //  Created by Etienne Vautherin on 25/02/2024.
 //
 
 import XCTest
+import AsyncExtensions
 @testable import Explorer
 
-final class RunningTests: XCTestCase {
+// https://www.hackingwithswift.com/quick-start/concurrency/how-to-convert-an-asyncsequence-into-a-sequence
+extension AsyncSequence {
+    func collect() async rethrows -> [Element] {
+        try await reduce(into: [Element]()) { $0.append($1) }
+    }
+}
+
+final class RunningServiceTests: XCTestCase {
     
-    let sut = Running(initialState: .stopped)
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
+    let sut = RunningService(.stopped)
 
     func testState() throws {
         // This is an example of a functional test case.

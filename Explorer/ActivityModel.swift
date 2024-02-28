@@ -12,7 +12,7 @@ import AsyncExtensions
 
 @Observable
 class ActivityModel {
-    let running: RunningService
+    let runningService: RunningService
     let scenePhaseUpdates: AsyncChannel<ScenePhase> // AsyncCurrentValueSubject<ScenePhase> //
     
     var explorerActivity: Activity<ExplorationAttributes>?
@@ -36,7 +36,7 @@ class ActivityModel {
 //                let terminationString = String(describing: termination)
 //                appLog.debug("scenePhaseUpdates termination: \(terminationString)")
 //            })
-        return combineLatest(running.updates, scenePhaseUpdates, activityEnablementUpdates)
+        return combineLatest(runningService.stateUpdates, scenePhaseUpdates, activityEnablementUpdates)
             .map { started, activeApp, enabled -> Bool in
                 let startedString = String(describing: started)
                 let activeAppString = String(describing: activeApp)
@@ -68,8 +68,8 @@ class ActivityModel {
     }
     
     private var stopActivityUpdates: AsyncMapSequence<some AsyncSequence, ()> {
-        running.updates
-            .filter { [self] in 
+        runningService.stateUpdates
+            .filter { [self] in
                 switch self.explorerActivity {
                 case .none:
                     appLog.debug("No activity, filter return false")
@@ -87,10 +87,10 @@ class ActivityModel {
 
     init(
         scenePhaseUpdates: AsyncChannel<ScenePhase> = ExplorerApp.scenePhaseUpdates,
-        running: RunningService = .shared
+        runningService: RunningService = .shared
     ) {
         appLog.debug("ActivityModel init")
-        self.running = running
+        self.runningService = runningService
         self.scenePhaseUpdates = scenePhaseUpdates
         
         Task {
