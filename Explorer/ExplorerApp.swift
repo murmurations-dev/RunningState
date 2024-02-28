@@ -17,7 +17,7 @@ struct ExplorerApp: App {
     @Environment(\.scenePhase) private var scenePhase
     
     static let scenePhaseUpdates = AsyncChannel<ScenePhase>() // AsyncCurrentValueSubject<ScenePhase> //
-    let activityModel = ActivityModel()
+    let sharedActivityModel = ActivityModel()
     
     var body: some Scene {
         WindowGroup {

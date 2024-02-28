@@ -13,7 +13,7 @@ struct ExplorationAttributes: ActivityAttributes {
     public struct ContentState: Codable, Hashable {
         // Dynamic stateful properties about your activity go here!
         var emoji: String
-        var runningState: Running.State
+        var runningState: RunningService.State
     }
 
     // Fixed non-changing properties about your activity go here!

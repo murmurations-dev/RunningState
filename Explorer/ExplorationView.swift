@@ -17,14 +17,14 @@ struct ExplorationView: View {
             case .stopped:
                 Button(
                     "Start",
-                    intent: Running.State.SetStarted()
+                    intent: RunningService.State.SetStarted()
                 ).padding()
             case .started:
                 VStack {
                     ProgressView()
                     Button(
                         "Stop",
-                        intent: Running.State.SetStopped()
+                        intent: RunningService.State.SetStopped()
                     ).padding()
                 }
             }
@@ -40,9 +40,9 @@ struct ExplorationView: View {
 
 extension ExplorationView {
     @Observable class Model {
-        var state: Running.State
+        var state: RunningService.State
         
-        let running = Running.shared
+        let running = RunningService.shared
         var updatesTask: Task<(), Never>?
 
         init() {

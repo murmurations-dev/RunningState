@@ -7,7 +7,7 @@
 
 import AppIntents
 
-extension Running {
+extension RunningService {
     enum State: String, Sendable, Codable {
         case stopped
         case started
@@ -18,7 +18,7 @@ extension Running {
     }
 }
 
-extension Running.State : AppEnum {
+extension RunningService.State : AppEnum {
     public static let caseDisplayRepresentations: [Self: DisplayRepresentation] = [
         .stopped: .init(title: "Stopped", image: .init(systemName: "location.slash")),
         .started: .init(title: "Started", image: .init(systemName: "location"))

@@ -12,7 +12,7 @@ import AsyncExtensions
 
 @Observable
 class ActivityModel {
-    let running: Running
+    let running: RunningService
     let scenePhaseUpdates: AsyncChannel<ScenePhase> // AsyncCurrentValueSubject<ScenePhase> //
     
     var explorerActivity: Activity<ExplorationAttributes>?
@@ -87,7 +87,7 @@ class ActivityModel {
 
     init(
         scenePhaseUpdates: AsyncChannel<ScenePhase> = ExplorerApp.scenePhaseUpdates,
-        running: Running = .shared
+        running: RunningService = .shared
     ) {
         appLog.debug("ActivityModel init")
         self.running = running

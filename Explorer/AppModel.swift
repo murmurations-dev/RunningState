@@ -11,12 +11,13 @@ class AppModel {
     static let shared = AppModel()
     var explorerActivity: Activity<ExplorationAttributes>?
 
-    let running: Running
+    let running: RunningService
     
     init(
+        runningService: RunningService = RunningService.shared,
         runningStateValue: Running.State = .stopped
     ) {
-        self.running = Running(initialState: runningStateValue)
+        self.running = runningService
         explorationActivity(state: runningStateValue)
         
         Task {
