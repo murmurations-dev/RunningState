@@ -13,7 +13,7 @@ struct ExplorationView: View {
 
     var body: some View {
         VStack {
-            switch model.state {
+            switch model.serviceState {
             case .stopped:
                 Button(
                     "Start",
@@ -40,21 +40,17 @@ struct ExplorationView: View {
 
 extension ExplorationView {
     @Observable class Model {
-        var state: RunningService.State
+        var serviceState: RunningService.State
         
         let runningService: RunningService
-        var updatesTask: Task<(), Error>?
+        var observation: AsyncObservation<RunningService.StateUpdates>?
 
         init(
             runningService: RunningService = RunningService.shared
         ) {
             self.runningService = runningService
-            self.state = runningService.getStateValue()
-            self.updatesTask = runningService.assignStateUpdates(to: self, on: \.state)
-        }
-        
-        deinit {
-            updatesTask?.cancel()
+            self.serviceState = runningService.getStateValue()
+            self.observation = runningService.observeAsViewState(to: self, on: \.serviceState)
         }
     }
 }

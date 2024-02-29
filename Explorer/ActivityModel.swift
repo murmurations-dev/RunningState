@@ -36,7 +36,7 @@ class ActivityModel {
 //                let terminationString = String(describing: termination)
 //                appLog.debug("scenePhaseUpdates termination: \(terminationString)")
 //            })
-        return combineLatest(runningService.stateUpdates, scenePhaseUpdates, activityEnablementUpdates)
+        combineLatest(runningService.stateUpdates, scenePhaseUpdates, activityEnablementUpdates)
             .map { started, activeApp, enabled -> Bool in
                 let startedString = String(describing: started)
                 let activeAppString = String(describing: activeApp)
@@ -67,21 +67,17 @@ class ActivityModel {
             }
     }
     
-    private var stopActivityUpdates: AsyncMapSequence<some AsyncSequence, ()> {
-        runningService.stateUpdates
-            .filter { [self] in
-                switch self.explorerActivity {
-                case .none:
-                    appLog.debug("No activity, filter return false")
-                    return false
-                case .some(_):
-                    appLog.debug("Some activity, runningState: \(String(describing: $0))")
-                    return $0 == .stopped
-                }
+    private var stopActivityUpdates: AsyncCompactMapSequence<some AsyncSequence, ()> {
+        combineLatest(runningService.stateUpdates, scenePhaseUpdates)
+            .map { [self] started, activeApp -> Bool in
+                let startedString = String(describing: started)
+                let activeAppString = String(describing: activeApp)
+                appLog.debug("started: \(startedString), activeApp: \(activeAppString)")
+                guard let explorerActivity, started == .stopped /* , activeApp == .background */ else { return false }
+                return true
             }
-            .map { _ in
-                appLog.debug("Stop activity")
-                return ()
+            .compactMap { start -> ()? in
+                if start { return () } else { return .none }
             }
     }
 

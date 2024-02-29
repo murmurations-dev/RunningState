@@ -6,29 +6,27 @@
 //
 
 
-protocol AsyncSequenceState<StateElement, Sequence> {
+protocol AsyncSequenceState<StateElement, StateUpdates> {
     associatedtype StateElement : Sendable
-    associatedtype Sequence : AsyncSequence where Sequence.Element == StateElement
+    associatedtype StateUpdates : AsyncSequence where StateUpdates.Element == StateElement
     
-    var stateUpdates: Sequence { get }
+    var stateUpdates: StateUpdates { get }
 
     func setStateValue(_ newStateValue: StateElement)
     func getStateValue() -> StateElement
-    func assignStateUpdates<Root>(
+    func observeAsViewState<Root>(
         to receiver: Root,
         on keyPath: ReferenceWritableKeyPath<Root, StateElement>
-    ) -> Task<(), Error>
+    ) -> AsyncObservation<StateUpdates>
 }
 
 extension AsyncSequenceState {
-    func assignStateUpdates<Root>(
+    func observeAsViewState<Root>(
         to receiver: Root,
         on keyPath: ReferenceWritableKeyPath<Root, StateElement>
-    ) -> Task<(), Error> {
-        Task { @MainActor in
-            for try await state in stateUpdates {
-                receiver[keyPath: keyPath] = state
-            }
+    ) -> AsyncObservation<StateUpdates> {
+        AsyncObservation(stateUpdates) { element in
+            receiver[keyPath: keyPath] = element
         }
     }
 }

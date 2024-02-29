@@ -8,7 +8,7 @@
 import AsyncExtensions
 
 protocol AsyncCurrentValueSubjectState : AsyncSequenceState
-where Sequence == AsyncCurrentValueSubject<StateElement> {}
+where StateUpdates == AsyncCurrentValueSubject<StateElement> {}
 
 extension AsyncCurrentValueSubjectState {
     func setStateValue(_ newStateValue: StateElement) {
