@@ -13,9 +13,11 @@ import AsyncExtensions
 @Observable
 class ActivityModel {
     let runningService: RunningService
-    let scenePhaseUpdates: AsyncChannel<ScenePhase> // AsyncCurrentValueSubject<ScenePhase> //
+    let scenePhaseUpdates: AsyncCurrentValueSubject<ScenePhase>
     
-    var explorerActivity: Activity<ExplorationAttributes>?
+    let activities = Activity<ExplorationActivity>.activities
+    
+    var explorerActivity: Activity<ExplorationActivity>?
     
     let activityEnablementUpdates = chain( AsyncJustSequence(ActivityKit.ActivityAuthorizationInfo().areActivitiesEnabled),
         ActivityKit.ActivityAuthorizationInfo().activityEnablementUpdates
@@ -80,7 +82,7 @@ class ActivityModel {
     }
 
     init(
-        scenePhaseUpdates: AsyncChannel<ScenePhase> = ExplorerApp.scenePhaseUpdates,
+        scenePhaseUpdates: AsyncCurrentValueSubject<ScenePhase> = ExplorerApp.scenePhaseValues,
         runningService: RunningService = .shared
     ) {
         appLog.debug("ActivityModel init")
@@ -165,11 +167,11 @@ class ActivityModel {
         }
         
         appLog.debug("Starting activity")
-        let exploration = ExplorationAttributes(name: "Smile")
-        let initialState = ExplorationAttributes.ContentState(emoji: "😀", runningState: .started)
+        let exploration = ExplorationActivity(name: "Smile")
+        let initialState = ExplorationActivity.ContentState(emoji: "😀", runningState: .started)
         
         do {
-            self.explorerActivity = try Activity<ExplorationAttributes>.request(
+            self.explorerActivity = try Activity<ExplorationActivity>.request(
                 attributes: exploration,
                 content: .init(state: initialState, staleDate: .none),
                 pushType: .none
@@ -187,7 +189,7 @@ class ActivityModel {
         }
         appLog.debug("Stopping activity")
         Task {
-            let updatedState = ExplorationAttributes.ContentState(emoji: "🙄", runningState: .stopped)
+            let updatedState = ExplorationActivity.ContentState(emoji: "🙄", runningState: .stopped)
             await explorerActivity.end(
                 .init(state: updatedState, staleDate: .none),
                 dismissalPolicy: .default

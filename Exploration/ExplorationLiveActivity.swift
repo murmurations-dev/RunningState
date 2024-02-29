@@ -9,20 +9,9 @@ import ActivityKit
 import WidgetKit
 import SwiftUI
 
-struct ExplorationAttributes: ActivityAttributes {
-    public struct ContentState: Codable, Hashable {
-        // Dynamic stateful properties about your activity go here!
-        var emoji: String
-        var runningState: RunningService.State
-    }
-
-    // Fixed non-changing properties about your activity go here!
-    var name: String
-}
-
 struct ExplorationLiveActivity: Widget {
     var body: some WidgetConfiguration {
-        ActivityConfiguration(for: ExplorationAttributes.self) { context in
+        ActivityConfiguration(for: ExplorationActivity.self) { context in
             // Lock screen/banner UI goes here
             VStack {
                 Text("Hello \(context.state.emoji)")
@@ -57,25 +46,25 @@ struct ExplorationLiveActivity: Widget {
     }
 }
 
-extension ExplorationAttributes {
-    fileprivate static var preview: ExplorationAttributes {
-        ExplorationAttributes(name: "World")
+extension ExplorationActivity {
+    fileprivate static var preview: ExplorationActivity {
+        ExplorationActivity(name: "World")
     }
 }
 
-extension ExplorationAttributes.ContentState {
-    fileprivate static var smiley: ExplorationAttributes.ContentState {
-        ExplorationAttributes.ContentState(emoji: "😀", runningState: .stopped)
+extension ExplorationActivity.ContentState {
+    fileprivate static var smiley: ExplorationActivity.ContentState {
+        ExplorationActivity.ContentState(emoji: "😀", runningState: .stopped)
      }
      
-     fileprivate static var starEyes: ExplorationAttributes.ContentState {
-         ExplorationAttributes.ContentState(emoji: "🤩", runningState: .stopped)
+     fileprivate static var starEyes: ExplorationActivity.ContentState {
+         ExplorationActivity.ContentState(emoji: "🤩", runningState: .stopped)
      }
 }
 
-#Preview("Notification", as: .content, using: ExplorationAttributes.preview) {
+#Preview("Notification", as: .content, using: ExplorationActivity.preview) {
    ExplorationLiveActivity()
 } contentStates: {
-    ExplorationAttributes.ContentState.smiley
-    ExplorationAttributes.ContentState.starEyes
+    ExplorationActivity.ContentState.smiley
+    ExplorationActivity.ContentState.starEyes
 }

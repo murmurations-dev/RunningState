@@ -16,7 +16,8 @@ let appLog = Logger()
 struct ExplorerApp: App {
     @Environment(\.scenePhase) private var scenePhase
     
-    static let scenePhaseUpdates = AsyncChannel<ScenePhase>() // AsyncCurrentValueSubject<ScenePhase> //
+    static let scenePhaseValues = AsyncCurrentValueSubject<ScenePhase>(.background)
+
     let sharedActivityModel = ActivityModel()
     
     var body: some Scene {
@@ -28,8 +29,7 @@ struct ExplorerApp: App {
             let decription = String(describing: self.scenePhase)
             appLog.debug("scenePhase: \(decription)")
             
-            Task { await ExplorerApp.scenePhaseUpdates.send(newPhase) }
-            // scenePhaseUpdates.send(newPhase)
+            ExplorerApp.scenePhaseValues.send(newPhase)
             
             if newPhase == .background {
                 // Perform cleanup when all scenes within
