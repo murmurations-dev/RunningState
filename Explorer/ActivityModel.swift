@@ -68,13 +68,11 @@ class ActivityModel {
     }
     
     private var stopActivityUpdates: AsyncCompactMapSequence<some AsyncSequence, ()> {
-        combineLatest(runningService.stateUpdates, scenePhaseUpdates)
-            .map { [self] started, activeApp -> Bool in
+        runningService.stateUpdates
+            .map { started -> Bool in
                 let startedString = String(describing: started)
-                let activeAppString = String(describing: activeApp)
-                appLog.debug("started: \(startedString), activeApp: \(activeAppString)")
-                guard let explorerActivity, started == .stopped /* , activeApp == .background */ else { return false }
-                return true
+                appLog.debug("started: \(startedString)")
+                return started == .stopped
             }
             .compactMap { start -> ()? in
                 if start { return () } else { return .none }

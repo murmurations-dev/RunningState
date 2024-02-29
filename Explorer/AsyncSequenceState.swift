@@ -14,19 +14,19 @@ protocol AsyncSequenceState<StateElement, StateUpdates> {
 
     func setStateValue(_ newStateValue: StateElement)
     func getStateValue() -> StateElement
-    func observeAsViewState<Root>(
+    func assignStateUpdates<Root>(
         to receiver: Root,
-        on keyPath: ReferenceWritableKeyPath<Root, StateElement>
+        on keyPath: ReferenceWritableKeyPath<Root, StateElement>,
+        _ assignement: Assignement<Root, StateElement>
     ) -> AsyncObservation<StateUpdates>
 }
 
 extension AsyncSequenceState {
-    func observeAsViewState<Root>(
+    func assignStateUpdates<Root>(
         to receiver: Root,
-        on keyPath: ReferenceWritableKeyPath<Root, StateElement>
+        on keyPath: ReferenceWritableKeyPath<Root, StateElement>,
+        _ assignement: Assignement<Root, StateElement>
     ) -> AsyncObservation<StateUpdates> {
-        AsyncObservation(stateUpdates) { element in
-            receiver[keyPath: keyPath] = element
-        }
+        stateUpdates.assign(to: receiver, on: keyPath, assignement)
     }
 }

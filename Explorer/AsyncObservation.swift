@@ -8,7 +8,7 @@
 class AsyncObservation<Base: AsyncSequence> {
     private let task: Task<(), Error>
     
-    init(_ sequence: Base, action: @escaping (Base.Element) -> ()) {
+    init(_ sequence: Base, onUpdate action: @escaping (Base.Element) -> ()) {
         self.task = Task {
             for try await element in sequence {
                 action(element)
@@ -21,13 +21,3 @@ class AsyncObservation<Base: AsyncSequence> {
     }
 }
 
-extension AsyncSequence {
-    func collectAsViewState<Root>(
-        to receiver: Root,
-        on keyPath: ReferenceWritableKeyPath<Root, Element>
-    ) -> AsyncObservation<Self> {
-        AsyncObservation(self) { element in
-            receiver[keyPath: keyPath] = element
-        }
-    }
-}

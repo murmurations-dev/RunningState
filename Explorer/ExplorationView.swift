@@ -42,15 +42,15 @@ extension ExplorationView {
     @Observable class Model {
         var serviceState: RunningService.State
         
-        let runningService: RunningService
+        let service: RunningService
         var observation: AsyncObservation<RunningService.StateUpdates>?
 
         init(
-            runningService: RunningService = RunningService.shared
+            service: RunningService = RunningService.shared
         ) {
-            self.runningService = runningService
-            self.serviceState = runningService.getStateValue()
-            self.observation = runningService.observeAsViewState(to: self, on: \.serviceState)
+            self.service = service
+            self.serviceState = service.getStateValue()
+            self.observation = service.assignStateUpdates(to: self, on: \.serviceState, .mainActor)
         }
     }
 }

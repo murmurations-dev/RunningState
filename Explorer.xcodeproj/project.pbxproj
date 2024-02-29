@@ -20,6 +20,8 @@
 		8F52BFEF2B909E6500CC85D2 /* AsyncObservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F52BFEE2B909E6500CC85D2 /* AsyncObservation.swift */; };
 		8F52BFF12B909E9D00CC85D2 /* AsyncObservationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F52BFF02B909E9D00CC85D2 /* AsyncObservationTests.swift */; };
 		8F52BFF22B90BC8800CC85D2 /* AsyncObservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F52BFEE2B909E6500CC85D2 /* AsyncObservation.swift */; };
+		8F52BFF42B90F0D000CC85D2 /* Assignement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F52BFF32B90F0D000CC85D2 /* Assignement.swift */; };
+		8F52BFF52B90F0F100CC85D2 /* Assignement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F52BFF32B90F0D000CC85D2 /* Assignement.swift */; };
 		8FA98F722B8D2C10004360E9 /* AsyncExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8FA98F712B8D2C10004360E9 /* AsyncExtensions */; };
 		8FA98F742B8D2C83004360E9 /* AsyncExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8FA98F732B8D2C83004360E9 /* AsyncExtensions */; };
 		8FA98F762B8D3598004360E9 /* ExplorationLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC60BFB2B8D0B20000B0A8C /* ExplorationLiveActivity.swift */; };
@@ -87,6 +89,7 @@
 		8F52BFE62B8F9F4000CC85D2 /* RunningService_AppIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningService_AppIntents.swift; sourceTree = "<group>"; };
 		8F52BFEE2B909E6500CC85D2 /* AsyncObservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncObservation.swift; sourceTree = "<group>"; };
 		8F52BFF02B909E9D00CC85D2 /* AsyncObservationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncObservationTests.swift; sourceTree = "<group>"; };
+		8F52BFF32B90F0D000CC85D2 /* Assignement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assignement.swift; sourceTree = "<group>"; };
 		8FA98F7A2B8DD1D5004360E9 /* ActivityModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityModel.swift; sourceTree = "<group>"; };
 		8FC60B982B8B85E1000B0A8C /* Explorer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Explorer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8FC60B9B2B8B85E1000B0A8C /* ExplorerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExplorerApp.swift; sourceTree = "<group>"; };
@@ -180,6 +183,7 @@
 				8FA98F7A2B8DD1D5004360E9 /* ActivityModel.swift */,
 				8FC60B9D2B8B85E1000B0A8C /* ExplorationView.swift */,
 				8F52BFEE2B909E6500CC85D2 /* AsyncObservation.swift */,
+				8F52BFF32B90F0D000CC85D2 /* Assignement.swift */,
 				8F52BFDC2B8F9AC400CC85D2 /* AsyncSequenceState.swift */,
 				8F52BFDE2B8F9B4D00CC85D2 /* AsyncCurrentValueSubjectState.swift */,
 				8F52BFE22B8F9C6600CC85D2 /* RunningService.swift */,
@@ -411,6 +415,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8F52BFF42B90F0D000CC85D2 /* Assignement.swift in Sources */,
 				8F52BFED2B8FA18600CC85D2 /* ExplorationView.swift in Sources */,
 				8F52BFE52B8F9ED400CC85D2 /* RunningService.State.swift in Sources */,
 				8F52BFE32B8F9C6600CC85D2 /* RunningService.swift in Sources */,
@@ -451,6 +456,7 @@
 				8FC60BFC2B8D0B20000B0A8C /* ExplorationLiveActivity.swift in Sources */,
 				8F52BFE82B8FA00100CC85D2 /* RunningService.swift in Sources */,
 				8F52BFF22B90BC8800CC85D2 /* AsyncObservation.swift in Sources */,
+				8F52BFF52B90F0F100CC85D2 /* Assignement.swift in Sources */,
 				8FC60BFA2B8D0B20000B0A8C /* ExplorationBundle.swift in Sources */,
 				8FC60BFE2B8D0B20000B0A8C /* Exploration.swift in Sources */,
 				8F52BFEB2B8FA03B00CC85D2 /* AsyncCurrentValueSubjectState.swift in Sources */,
