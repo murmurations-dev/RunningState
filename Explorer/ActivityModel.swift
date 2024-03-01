@@ -15,8 +15,6 @@ class ActivityModel {
     let runningService: RunningService
     let scenePhaseUpdates: AsyncCurrentValueSubject<ScenePhase>
     
-    let activities = Activity<ExplorationActivity>.activities
-    
     var explorerActivity: Activity<ExplorationActivity>?
     
     let activityEnablementUpdates = chain( AsyncJustSequence(ActivityKit.ActivityAuthorizationInfo().areActivitiesEnabled),
